@@ -9,7 +9,7 @@ import streamlit as st
 
 # Get clean data function for the sidebar
 def get_clean_data():
-    data = pd.read_csv("../data/data.csv")
+    data = pd.read_csv("data/data.csv")
 
     # Drop Unnamed: 32 and id column
     data = data.drop(["Unnamed: 32", 'id'], axis=1)
@@ -147,8 +147,8 @@ def get_radar_chart(input_data):
 
 # Add prediction function to get prediction from model
 def add_predictions(input_data):
-    model = pickle.load(open("../model/breast_cancer_model.pkl", "rb"))
-    scalar = pickle.load(open("../model/breast_cancer_scalar.pkl", "rb"))
+    model = pickle.load(open("model/breast_cancer_model.pkl", "rb"))
+    scalar = pickle.load(open("model/breast_cancer_scalar.pkl", "rb"))
 
     # Convert input data to array
     input_array = np.array(list(input_data.values())).reshape(1, -1)
@@ -183,7 +183,7 @@ def main():
     )
 
     # Add CSS Styles
-    with open("../assets/style.css") as f:
+    with open("assets/style.css") as f:
         st.markdown('<style>{}</style>'.format(f.read()), unsafe_allow_html=True)
 
     # Add sidebar data to dictionary
