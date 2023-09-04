@@ -190,7 +190,7 @@ def main():
 
     # Add a title and some text to the app:
     with st.container():
-        st.title("Breast Cancer Diagnosis Predictor")
+        st.title("WGU Capstone: Breast Cancer Diagnosis Predictor")
         st.write("This machine learning model evaluates tissue samples to determine the nature of a breast mass. "
                  "Users have the option to manually adjust the measurements through easy-to-use sliders located on "
                  "the sidebar. This app can be linked with a cytology lab to facilitate quick and accurate breast "
