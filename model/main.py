@@ -1,11 +1,12 @@
-import pandas as pd
+# Using Scikit-learn to Build and Train Machine Learning Models
+
 import pickle
 
-# Using Scikit-learn to Build and Train Machine Learning Models
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
+import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
 
 
 # Model creation function
