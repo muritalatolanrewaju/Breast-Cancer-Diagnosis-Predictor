@@ -17,7 +17,7 @@ The Breast-Cancer-ML-Diagnosis repository contains a machine learning-powered ap
 - **Probability Display**: Alongside the diagnosis, the app also displays the probability of the mass being benign or malignant.
 
 ## Technology Stack
-- **Machine Learning Algorithm**: The predictive model is trained on the Breast Cancer Wisconsin (Diagnostic) Data Set.
+- **Machine Learning Algorithm**: The predictive model is trained on the [Breast Cancer Wisconsin (Diagnostic) Data Set.](https://www.kaggle.com/datasets/uciml/breast-cancer-wisconsin-data) The model is trained using the Logistic Regression algorithm.
 - **Visualization Tools**: Radar charts are used for data visualization.
 
 ## Installation
@@ -40,7 +40,7 @@ This will install the necessary dependencies, including:
 To run the app, execute:
 
 ```bash
-streamlit run app.py
+python3 -m streamlit run app.py
 ```
 
 This will open the app in your default browser. You can then enter the measurements related to the breast mass and click the "Predict" button to view the diagnosis and probability.
