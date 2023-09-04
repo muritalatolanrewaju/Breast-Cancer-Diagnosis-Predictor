@@ -1,9 +1,10 @@
 # This is the main file of the Streamlit application
-import streamlit as st
 import pickle
+
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
-import numpy as np
+import streamlit as st
 
 
 # Get clean data function for the sidebar
