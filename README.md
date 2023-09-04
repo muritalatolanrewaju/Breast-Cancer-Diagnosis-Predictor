@@ -20,6 +20,31 @@ The Breast-Cancer-ML-Diagnosis repository contains a machine learning-powered ap
 - **Machine Learning Algorithm**: The predictive model is trained on the Breast Cancer Wisconsin (Diagnostic) Data Set.
 - **Visualization Tools**: Radar charts are used for data visualization.
 
+## Installation
+To run the Breast Cancer Diagnosis app locally, ensure you have Python 3.6 or higher installed. Install the required packages by executing:
+
+```bash
+pip install -r requirements.txt
+```
+
+This will install the necessary dependencies, including:
+
+- streamlit
+- numpy
+- pandas
+- pickle
+- plotly
+- scikit-learn
+
+## Usage
+To run the app, execute:
+
+```bash
+streamlit run app.py
+```
+
+This will open the app in your default browser. You can then enter the measurements related to the breast mass and click the "Predict" button to view the diagnosis and probability.
+
 ## Disclaimer
 This app is developed as a machine learning exercise using the public dataset Breast Cancer Wisconsin (Diagnostic) Data Set. It is intended solely for educational purposes in the field of machine learning and is not designed for professional medical use. The dataset may not be entirely reliable for clinical diagnosis.
 
