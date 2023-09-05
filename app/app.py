@@ -3,6 +3,8 @@ import pickle
 
 import numpy as np
 import pandas as pd
+import plotly.express as px
+import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import streamlit as st
 
@@ -145,6 +147,89 @@ def get_radar_chart(input_data):
     return fig
 
 
+# Add function to get pie chart
+def get_pie_chart():
+    df = pd.read_csv("data/data.csv")
+    labels = df.diagnosis.unique()
+    values = [len(df[df.diagnosis == 'M']), len(df[df.diagnosis == 'B'])]
+    trace = [go.Pie(labels=labels, values=values,
+                    marker=dict(colors=["red", "green"]))]
+
+    layout = go.Layout(title="Percentage of M = malignant, B = benign ")
+    pie_chart = go.Figure(data=trace, layout=layout)
+    return pie_chart
+
+
+# Add function to get bar chart
+def get_bar_chart():
+    df = pd.read_csv("data/data.csv")
+    trace = [go.Bar(x=df.diagnosis.unique(), y=(len(df[df.diagnosis == 'M']), len(df[df.diagnosis == 'B'])),
+                    marker=dict(color=["red", "green"]))]
+
+    layout = go.Layout(title="Diagnosis Count of M = malignant, B = benign ")
+    bar_chart = go.Figure(data=trace, layout=layout)
+    return bar_chart
+
+
+# Add function to get scatter plot
+def get_scatter_plot():
+    df = pd.read_csv("data/data.csv")
+    scatter_plot_1 = px.scatter(df, x="radius_mean", y="compactness_mean", color="diagnosis",
+                                title="Scatter Plot of Radius Mean and Compactness Mean", width=800, height=800,
+                                template='plotly_white', color_discrete_sequence=["red", "green"], hover_data=['id'])
+
+    scatter_plot_2 = px.scatter(df, x="area_mean", y="radius_mean", color="diagnosis",
+                                title="Scatter Plot of Radius Mean and Area Mean", width=800, height=800,
+                                template='plotly_white', color_discrete_sequence=["red", "green"], hover_data=['id'])
+
+    return scatter_plot_1, scatter_plot_2
+
+
+# Add function to get distribution plot
+def get_dist_plot():
+    df = pd.read_csv("data/data.csv")
+    hist_data_radius_mean = [df[df['diagnosis'] == 'M']['radius_mean'],
+                             df[df['diagnosis'] == 'B']['radius_mean']]
+
+    hist_data_texture_mean = [df[df['diagnosis'] == 'M']['texture_mean'],
+                              df[df['diagnosis'] == 'B']['texture_mean']]
+
+    group_labels = ['Malignant', 'Benign']
+
+    dist_plot_radius_mean = ff.create_distplot(hist_data_radius_mean, group_labels, bin_size=0.2,
+                                               colors=["red", "green"])
+    dist_plot_texture_mean = ff.create_distplot(hist_data_texture_mean, group_labels, bin_size=0.2,
+                                                colors=["red", "green"])
+
+    dist_plot_radius_mean.update_layout(title_text='Distribution Plot of Radius Mean')
+    dist_plot_texture_mean.update_layout(title_text='Distribution Plot of Texture Mean')
+
+    return dist_plot_radius_mean, dist_plot_texture_mean
+
+
+# Add function to get heatmap
+def get_heatmap():
+    heatmap = pd.read_csv("data/data.csv")
+    heatmap = heatmap.drop(["Unnamed: 32", 'id'], axis=1)
+    heatmap['diagnosis'] = heatmap['diagnosis'].map({'M': 1, 'B': 0})
+    corr = heatmap.corr()
+
+    heatmap = px.imshow(corr, color_continuous_scale='RdBu_r', title='Correlation Matrix', width=800, height=800,
+                        range_color=[-1, 1], labels=dict(x="Features", y="Features", color="Correlation Coefficient"),
+                        template='plotly_white', text_auto=".2f")
+    return heatmap
+
+
+# Add function to get descriptive statistics
+def get_descriptive_stats():
+    descriptive_stats = pd.read_csv("data/data.csv")
+    descriptive_stats = descriptive_stats.drop(["Unnamed: 32", 'id'], axis=1)
+    descriptive_stats['diagnosis'] = descriptive_stats['diagnosis'].map({'M': 1, 'B': 0})
+    descriptive_stats = descriptive_stats.describe()
+    descriptive_stats = descriptive_stats.transpose()
+    return descriptive_stats
+
+
 # Add prediction function to get prediction from model
 def add_predictions(input_data):
     model = pickle.load(open("model/breast_cancer_model.pkl", "rb"))
@@ -175,6 +260,7 @@ def add_predictions(input_data):
              "substitute for a professional diagnosis.")
 
 
+# Add main function
 def main():
     st.set_page_config(
         page_title="Breast Cancer Diagnosis Predictor",
@@ -204,6 +290,34 @@ def main():
     with col1:
         radar_chart = get_radar_chart(input_data)
         st.plotly_chart(radar_chart)
+
+        st.title("Data Visualization")
+
+        # Add Pie Chart, Bar Chart, Scatter Plot, Distribution Plot, Descriptive Statistics, and Heatmap
+        st.subheader("Pie Chart")
+        pie_chart = get_pie_chart()
+        st.plotly_chart(pie_chart)
+
+        st.subheader("Count Plot")
+        bar_chart = get_bar_chart()
+        st.plotly_chart(bar_chart)
+
+        st.subheader("Scatter Plot")
+        scatter_plot_1, scatter_plot_2 = get_scatter_plot()
+        st.plotly_chart(scatter_plot_1)
+        st.plotly_chart(scatter_plot_2)
+
+        st.subheader("Distribution Plot")
+        dist_plot_radius_mean, dist_plot_texture_mean = get_dist_plot()
+        st.plotly_chart(dist_plot_radius_mean)
+        st.plotly_chart(dist_plot_texture_mean)
+
+        st.subheader("Heatmap")
+        heatmap = get_heatmap()
+        st.plotly_chart(heatmap)
+
+        st.subheader("Descriptive Statistics")
+        st.write(get_descriptive_stats())
 
     # Write information in the second column
     with col2:

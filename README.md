@@ -34,10 +34,29 @@ representation and displays the predicted diagnosis along with its associated pr
   The model is trained using the Logistic Regression algorithm.
 - **Visualization Tools**: Radar charts are used for data visualization.
 
+## Check out the app
+
+Here is the link to the
+app: [Breast Cancer Diagnosis Predictor](https://breast-cancer-diagnosis-predictor-cfyc3bglmwsj8kbqhckal8.streamlit.app/)
+
 ## Installation
 
 To run the Breast Cancer Diagnosis app locally, ensure you have Python 3.6 or higher installed. Install the required
 packages by executing:
+
+- Clone the repository
+
+```bash
+git clone https://github.com/muritalatolanrewaju/Breast-Cancer-Diagnosis-Predictor.git
+```
+
+- Change directory to the app folder
+
+```bash
+cd Breast-Cancer-Diagnosis-Predictor
+```
+
+- Install the required packages
 
 ```bash
 pip install -r requirements.txt
