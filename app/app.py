@@ -151,7 +151,7 @@ def get_radar_chart(input_data):
     return fig
 
 
-# Add function to plot K-means clusters
+# Descriptive function to plot K-means clusters
 def get_kmeans_clusters():
     data = get_clean_data()
     X = data.drop(['diagnosis'], axis=1)
@@ -177,7 +177,7 @@ def get_kmeans_clusters():
     return fig
 
 
-# Add function to get k-means cluster plot
+# Descriptive function to get k-means cluster plot
 def get_kmeans_plot():
     data = get_clean_data()
     X = data.drop(['diagnosis'], axis=1)
@@ -197,7 +197,7 @@ def get_kmeans_plot():
     return kmeans_plot
 
 
-# Add function to plot Hierarchical Dendrogram
+# Descriptive function to plot Hierarchical Dendrogram
 def plot_hierarchical_dendrogram():
     # Get the clean data
     data = get_clean_data()
@@ -205,14 +205,17 @@ def plot_hierarchical_dendrogram():
     # Drop the diagnosis column to perform clustering
     X = data.drop(['diagnosis'], axis=1)
 
+    # Take a subset of the data for quicker computation
+    X_subset = X.sample(frac=0.05, random_state=42)
+
     # Generate the linkage matrix
-    Z = linkage(X, 'ward')
+    Z = linkage(X_subset, 'ward')
 
     # Create the dendrogram
     fig, ax = plt.subplots(figsize=(15, 7))
     dendrogram(Z, leaf_rotation=90., leaf_font_size=8.)
 
-    ax.set_title('Hierarchical Clustering Dendrogram')
+    ax.set_title('Hierarchical Clustering Dendrogram (Subset)')
     ax.set_xlabel('Data Points')
     ax.set_ylabel('Euclidean Distance')
 
