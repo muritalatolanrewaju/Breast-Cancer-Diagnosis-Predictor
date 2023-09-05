@@ -1,12 +1,16 @@
 # This is the main file of the Streamlit application
 import pickle
 
+import matplotlib.colors as mcolors
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.figure_factory as ff
 import plotly.graph_objects as go
 import streamlit as st
+from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.cluster import KMeans
 
 
 # Get clean data function for the sidebar
@@ -144,6 +148,74 @@ def get_radar_chart(input_data):
             )),
         showlegend=True
     )
+    return fig
+
+
+# Add function to plot K-means clusters
+def get_kmeans_clusters():
+    data = get_clean_data()
+    X = data.drop(['diagnosis'], axis=1)
+
+    # Initialize KMeans with 2 clusters
+    km = KMeans(n_clusters=2, n_init=10)  # Set n_init explicitly to 10
+    km.fit(X)
+
+    # Create a custom colormap
+    cmap = mcolors.ListedColormap(['red', 'green'])
+
+    # Create the plot
+    fig, ax = plt.subplots(figsize=(10, 5))
+    scatter = ax.scatter(x=X.iloc[:, 0], y=X.iloc[:, 1], c=km.labels_, cmap=cmap)
+
+    # Add a colorbar
+    cbar = plt.colorbar(scatter, ticks=[0, 1])
+    cbar.set_label('Cluster Labels')
+
+    ax.set_xlabel(X.columns[0])
+    ax.set_ylabel(X.columns[1])
+
+    return fig
+
+
+# Add function to get k-means cluster plot
+def get_kmeans_plot():
+    data = get_clean_data()
+    X = data.drop(['diagnosis'], axis=1)
+
+    inertias = []
+
+    for i in range(1, 11):
+        kmeans = KMeans(n_clusters=i, n_init=10, max_iter=300, random_state=42)
+        kmeans.fit(X)
+        inertias.append(kmeans.inertia_)
+
+    kmeans_plot, ax = plt.subplots()
+    ax.plot(range(1, 11), inertias, marker='o')
+    ax.set_xlabel('Number of clusters')
+    ax.set_ylabel('Inertia')
+
+    return kmeans_plot
+
+
+# Add function to plot Hierarchical Dendrogram
+def plot_hierarchical_dendrogram():
+    # Get the clean data
+    data = get_clean_data()
+
+    # Drop the diagnosis column to perform clustering
+    X = data.drop(['diagnosis'], axis=1)
+
+    # Generate the linkage matrix
+    Z = linkage(X, 'ward')
+
+    # Create the dendrogram
+    fig, ax = plt.subplots(figsize=(15, 7))
+    dendrogram(Z, leaf_rotation=90., leaf_font_size=8.)
+
+    ax.set_title('Hierarchical Clustering Dendrogram')
+    ax.set_xlabel('Data Points')
+    ax.set_ylabel('Euclidean Distance')
+
     return fig
 
 
@@ -288,12 +360,26 @@ def main():
 
     # Write information in the first column
     with col1:
+        # Add Radar Chart, K-Means Clustering, Pie Chart, Count Plot, Scatter Plot, Distribution Plot, Heatmap,
+        # and Descriptive
+        st.title("Data Visualization")
+
+        st.subheader("Radar Chart")
         radar_chart = get_radar_chart(input_data)
         st.plotly_chart(radar_chart)
 
-        st.title("Data Visualization")
+        st.subheader("K-Means 2-Clusters")
+        kmeans_clusters = get_kmeans_clusters()
+        st.pyplot(kmeans_clusters)
 
-        # Add Pie Chart, Bar Chart, Scatter Plot, Distribution Plot, Descriptive Statistics, and Heatmap
+        st.subheader("K-Means Cluster Plot")
+        kmeans_plot = get_kmeans_plot()
+        st.pyplot(kmeans_plot)
+
+        st.subheader("Hierarchical Clustering Dendrogram")
+        hierarchical_dendrogram_plot = plot_hierarchical_dendrogram()  # Descriptive Hierarchical Dendrogram
+        st.pyplot(hierarchical_dendrogram_plot)
+
         st.subheader("Pie Chart")
         pie_chart = get_pie_chart()
         st.plotly_chart(pie_chart)

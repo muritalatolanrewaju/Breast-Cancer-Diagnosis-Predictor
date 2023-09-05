@@ -69,6 +69,8 @@ This will install the necessary dependencies, including:
 - pandas
 - pickle
 - plotly
+- scipy
+- matplotlib
 - scikit-learn
 
 ## Usage
