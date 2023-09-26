@@ -206,7 +206,7 @@ def plot_hierarchical_dendrogram():
     X = data.drop(['diagnosis'], axis=1)
 
     # Take a subset of the data for quicker computation
-    X_subset = X.sample(frac=1, random_state=42)
+    X_subset = X.sample(frac=0.05, random_state=42)
 
     # Generate the linkage matrix
     Z = linkage(X_subset, 'ward')
